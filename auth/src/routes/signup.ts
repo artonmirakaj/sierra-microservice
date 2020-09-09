@@ -43,7 +43,7 @@ router.post(
       jwt: userJwt
     };
 
-    console.log('req.session.jwt: ', req.session.jwt);
+    console.log('sign up token: ', req.session.jwt);
 
     res.status(201).send(user);
   }
