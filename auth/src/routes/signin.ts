@@ -24,26 +24,29 @@ router.post('/api/users/signin', [
 
     const existingUser = await User.findOne({ email });
     if(!existingUser) {
-      throw new BadRequestError('Invalid Email');
+      throw new BadRequestError('Invalid credentials');
     }
 
-    const passwordsMatch = await Password.compare(existingUser.password, password);
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
     if(!passwordsMatch) {
-      throw new BadRequestError('Invalid Password')
+      throw new BadRequestError('Invalid credentials')
     }
 
-    // generate JWT
+    await existingUser.save();
+
     const userJwt = jwt.sign({
       id: existingUser.id,
       email: existingUser.email
     }, JWT_KEY);
 
-    // store it on session object
     req.session = {
       jwt: userJwt
     };
 
-    console.log('sign in token: ', req.session.jwt);
+    console.log('sign in jwt: ', req.session.jwt);
 
     res.status(200).send(existingUser);
   }
