@@ -41,7 +41,6 @@ router.post(
       jwt: userJwt
     };
 
-    console.log('sign up jwt: ', req.session.jwt);
     res.status(201).send(user);
   }
 );
